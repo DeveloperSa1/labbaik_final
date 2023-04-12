@@ -1,0 +1,28 @@
+1 You create initial value in Controller .
+
+EX:/final students = <StudentModel>[].obs;
+
+2 You Go To a Services and then fetch all Data
+EX:/
+ static Future<List<StudentModel>> allStudents() async {
+    List<StudentModel> students = [];
+
+    var docs = await fetchAllDocs('students');
+    for (var element in docs) {
+      students.add(StudentModel.fromJson(element.data()));
+    }
+    saveToLocal(students, 'students');
+    return students;
+  }
+
+  3 return back to Controller then add this func to on Init;
+
+  void fetchStudents() async {
+    await AdminServices.allStudents();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? items = pref.getString('students');
+    List<StudentModel> _students = AdminServices.getStudents(items!);
+    students.addAll(_students);
+  }
+
+/ This Will Add A List form Firebase To The Controller / 
